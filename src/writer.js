@@ -1,5 +1,4 @@
-import { configDotenv } from 'dotenv';
-import { database } from './firebase.js';
+import { database, ServerValue } from './firebase.js'; // Import ServerValue too
 
 const urlParams = new URLSearchParams(window.location.search);
 const roomId = urlParams.get('room');
@@ -17,9 +16,10 @@ const codeDisplay = document.getElementById('codeDisplay');
 const correctGrammarBtn = document.getElementById('correctGrammar');
 const pickupLineBtn = document.getElementById('pickupLine');
 
-const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
+const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY || 'your-gemini-api-key-here';
 const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
 
+console.log('Gemini API Key Loaded:', GEMINI_API_KEY);
 
 async function callGemini(prompt) {
   try {
@@ -69,19 +69,19 @@ correctGrammarBtn.addEventListener('click', async () => {
   const prompt = `Correct the grammar of this text and return only the corrected version, no explanations: "${text}"`;
   const correctedText = await callGemini(prompt);
   if (correctedText) {
-    messageInput.value = correctedText; // Replace, don’t append
+    messageInput.value = correctedText;
   }
 });
 
-// AI Pickup Line Generation
+// AI Pickup Line Generation (Enhanced below)
 pickupLineBtn.addEventListener('click', async () => {
   const text = messageInput.value.trim();
   const prompt = text
-    ? `Turn this text into a flirty pickup line, return only the pickup line: "${text}"`
-    : 'Generate a flirty pickup line, return only the line.';
+    ? `Transform this text into a creative, flirty pickup line that’s witty and unique, return only the pickup line: "${text}"`
+    : 'Generate a creative, flirty pickup line that’s witty and unique, return only the line.';
   const pickupLine = await callGemini(prompt);
   if (pickupLine) {
-    messageInput.value = pickupLine; // Replace, don’t append
+    messageInput.value = pickupLine;
   }
 });
 
@@ -89,7 +89,7 @@ function sendMessage(roomId, about, message) {
   database.ref(`rooms/${roomId}`).push({
     about: about,
     message: message,
-    timestamp: firebase.database.ServerValue.TIMESTAMP
+    timestamp: ServerValue.TIMESTAMP // Use imported ServerValue
   });
 }
 
@@ -135,7 +135,7 @@ generateLinkBtn.addEventListener('click', () => {
   const accessCode = generateAccessCode();
   database.ref(`codes/${accessCode}`).set({
     roomId: newRoomId,
-    createdAt: firebase.database.ServerValue.TIMESTAMP
+    createdAt: ServerValue.TIMESTAMP // Use imported ServerValue
   });
   const link = `${window.location.origin}/writer.html?room=${newRoomId}`;
   linkDisplay.textContent = link;
