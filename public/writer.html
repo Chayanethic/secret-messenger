@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secret Messenger - Write</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="bg-gradient-to-br from-gray-100 to-blue-100 font-sans min-h-screen flex flex-col">
+    <a href="https://wa.me/919883995198" target="_blank" rel="noopener" class="fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600 transition z-10">Help</a>
+
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl flex-grow">
+        <header class="text-center mb-6 sm:mb-8">
+            <img src="https://images.vexels.com/media/users/3/137678/isolated/preview/cd52ed115a2c5a0992d7b23b7b3b0f53-logo-geometric-polygonal-stroke.png" alt="Secret Messenger Logo" class="mx-auto mb-4 rounded-full w-20 h-20 sm:w-24 sm:h-24 shadow-lg">
+            <h1 class="text-3xl sm:text-4xl font-bold text-gray-800 animate-fade-in">Secret Messenger</h1>
+            <p class="text-gray-600 text-sm sm:text-base">Send a secret or create your own mystery</p>
+        </header>
+
+        <section class="bg-white p-4 sm:p-6 rounded-lg shadow-lg mb-6 sm:mb-8">
+            <h2 class="text-xl sm:text-2xl font-semibold text-gray-800 mb-4">Send a Secret Message</h2>
+            <input id="aboutYou" type="text" placeholder="About yourself (optional)" class="w-full p-3 border rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 transition text-sm sm:text-base">
+            <textarea id="message" placeholder="Your secret message" class="w-full p-3 border rounded-lg mb-4 h-24 sm:h-32 focus:outline-none focus:ring-2 focus:ring-blue-500 transition text-sm sm:text-base"></textarea>
+            <button id="sendMessage" class="bg-green-600 text-white px-4 py-2 sm:px-6 sm:py-2 rounded-full hover:bg-green-700 transition transform hover:scale-105 w-full sm:w-auto">Send Message</button>
+        </section>
+
+        <section class="bg-white p-4 sm:p-6 rounded-lg shadow-lg mb-6 sm:mb-8">
+            <h2 class="text-xl sm:text-2xl font-semibold text-gray-800 mb-4">Create Your Own Secret Link</h2>
+            <button id="generateLink" class="bg-blue-600 text-white px-4 py-2 sm:px-6 sm:py-2 rounded-full hover:bg-blue-700 transition transform hover:scale-105 w-full sm:w-auto">Generate Link</button>
+            <div id="linkContainer" class="mt-4 hidden">
+                <p id="linkDisplay" class="text-gray-700 break-all font-mono bg-gray-100 p-2 rounded text-sm sm:text-base"></p>
+                <p id="accessCode" class="text-blue-600 font-bold text-sm sm:text-base mt-2">Your Access Code: <span id="codeDisplay"></span></p>
+                <button id="copyLink" class="mt-2 bg-gray-600 text-white px-4 py-1 rounded hover:bg-gray-700 transition">Copy Link</button>
+                <div class="mt-2 flex space-x-2 justify-center">
+                    <a id="shareWhatsApp" href="#" target="_blank" class="bg-green-500 text-white p-2 rounded-full hover:bg-green-600 transition">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" class="w-5 h-5">
+                    </a>
+                    <a id="shareFacebook" href="#" target="_blank" class="bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700 transition">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook" class="w-5 h-5">
+                    </a>
+                    <a id="shareInstagram" href="#" target="_blank" class="bg-pink-500 text-white p-2 rounded-full hover:bg-pink-600 transition">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram" class="w-5 h-5">
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section class="mt-6 sm:mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+            <div class="bg-white p-4 sm:p-6 rounded-lg shadow-lg">
+                <h3 class="text-lg sm:text-xl font-semibold text-gray-800 mb-2">Rules</h3>
+                <ul class="list-disc pl-5 text-gray-600 text-sm sm:text-base">
+                    <li>Be respectful in your messages.</li>
+                    <li>Anonymity is optional—share what you’re comfortable with.</li>
+                    <li>Don’t misuse the link feature.</li>
+                    <li>Use your access code to view messages from any device.</li>
+                </ul>
+            </div>
+            <div class="bg-white p-4 sm:p-6 rounded-lg shadow-lg">
+                <h3 class="text-lg sm:text-xl font-semibold text-gray-800 mb-2">How to Use</h3>
+                <ol class="list-decimal pl-5 text-gray-600 text-sm sm:text-base">
+                    <li>Write a message and send it.</li>
+                    <li>Or generate your own link and save the access code.</li>
+                    <li>Share the link with others.</li>
+                    <li>Visit the creator page with your code to see responses.</li>
+                </ol>
+            </div>
+        </section>
+    </div>
+
+    <footer class="bg-gray-800 text-white text-center py-4 mt-6 sm:mt-8">
+        <p class="text-sm sm:text-base">© 2025 Hardy. All rights reserved.</p>
+    </footer>
+
+    <script type="module" src="/writer.js"></script>
+</body>
+</html>
