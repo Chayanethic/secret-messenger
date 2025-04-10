@@ -51,9 +51,9 @@ function displayMessage(data, skipLocalStorage = false) {
 
 function setupShareLinks(link) {
   const encodedLink = encodeURIComponent(link);
-  shareWhatsApp.href = `https://api.whatsapp.com/send?text=Check%20out%20my%20Secret%20Messenger%20link:%20${encodedLink}`;
-  shareFacebook.href = `https://www.facebook.com/sharer/sharer.php?u=${encodedLink}`;
-  shareInstagram.href = `https://www.instagram.com/?url=${encodedLink}`;
+  shareWhatsApp.href = `https://api.whatsapp.com/send?text=Got%20a%20secret%3F%20Drop%20it%20here%20anonymously%21%20${encodedLink}`;
+  shareFacebook.href = `https://www.facebook.com/sharer/sharer.php?u=${encodedLink}&quote=A%20mystery%20message%20awaits%E2%80%94reply%20without%20revealing%20yourself%21`;
+  shareInstagram.href = `https://www.instagram.com/share?text=Got%20a%20secret%3F%20Drop%20it%20here%20anonymously%21&url=${encodedLink}`;
 }
 
 function loadMessages(roomId, isFromAccessCode = false) {
