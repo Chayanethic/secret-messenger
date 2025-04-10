@@ -1,9 +1,12 @@
-import { database, ServerValue } from './firebase.js';
+import { configDotenv } from 'dotenv';
+import { database } from './firebase.js';
 
-const aboutYou = document.getElementById('aboutYou');
+const urlParams = new URLSearchParams(window.location.search);
+const roomId = urlParams.get('room');
+const aboutYouInput = document.getElementById('aboutYou');
 const messageInput = document.getElementById('message');
-const sendBtn = document.getElementById('sendMessage');
-const generateBtn = document.getElementById('generateLink');
+const sendMessageBtn = document.getElementById('sendMessage');
+const generateLinkBtn = document.getElementById('generateLink');
 const linkDisplay = document.getElementById('linkDisplay');
 const copyLinkBtn = document.getElementById('copyLink');
 const linkContainer = document.getElementById('linkContainer');
@@ -11,6 +14,84 @@ const shareWhatsApp = document.getElementById('shareWhatsApp');
 const shareFacebook = document.getElementById('shareFacebook');
 const shareInstagram = document.getElementById('shareInstagram');
 const codeDisplay = document.getElementById('codeDisplay');
+const correctGrammarBtn = document.getElementById('correctGrammar');
+const pickupLineBtn = document.getElementById('pickupLine');
+
+const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
+const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
+
+
+async function callGemini(prompt) {
+  try {
+    const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{
+          parts: [{
+            text: prompt
+          }]
+        }],
+        generationConfig: {
+          temperature: 0.7,
+          topK: 40,
+          topP: 0.95,
+          maxOutputTokens: 1024
+        }
+      })
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`API request failed with status ${response.status}: ${errorText}`);
+    }
+
+    const data = await response.json();
+    if (!data.candidates || !data.candidates[0]) {
+      throw new Error('No candidates returned from Gemini API');
+    }
+
+    return data.candidates[0].content.parts[0].text.trim();
+  } catch (error) {
+    console.error('Gemini API Error:', error);
+    alert('AI processing failed. Please try again.');
+    return null;
+  }
+}
+
+// AI Grammar Correction
+correctGrammarBtn.addEventListener('click', async () => {
+  const text = messageInput.value.trim();
+  if (!text) {
+    alert('Please enter a message first!');
+    return;
+  }
+  const prompt = `Correct the grammar of this text and return only the corrected version, no explanations: "${text}"`;
+  const correctedText = await callGemini(prompt);
+  if (correctedText) {
+    messageInput.value = correctedText; // Replace, don’t append
+  }
+});
+
+// AI Pickup Line Generation
+pickupLineBtn.addEventListener('click', async () => {
+  const text = messageInput.value.trim();
+  const prompt = text
+    ? `Turn this text into a flirty pickup line, return only the pickup line: "${text}"`
+    : 'Generate a flirty pickup line, return only the line.';
+  const pickupLine = await callGemini(prompt);
+  if (pickupLine) {
+    messageInput.value = pickupLine; // Replace, don’t append
+  }
+});
+
+function sendMessage(roomId, about, message) {
+  database.ref(`rooms/${roomId}`).push({
+    about: about,
+    message: message,
+    timestamp: firebase.database.ServerValue.TIMESTAMP
+  });
+}
 
 function generateRoomId() {
   return Math.random().toString(36).substring(2, 10);
@@ -27,67 +108,43 @@ function generateAccessCode() {
 
 function setupShareLinks(link) {
   const encodedLink = encodeURIComponent(link);
-  shareWhatsApp.href = `https://api.whatsapp.com/send?text=Check%20out%20my%20Secret%20Messenger%20link:%20${encodedLink}`;
-  shareFacebook.href = `https://www.facebook.com/sharer/sharer.php?u=${encodedLink}`;
+  shareWhatsApp.href = `https://api.whatsapp.com/send?text=Someone%E2%80%99s%20got%20a%20secret%20for%20you%E2%80%94dare%20to%20reply%20anonymously%3F%20${encodedLink}`;
+  shareFacebook.href = `https://www.facebook.com/sharer/sharer.php?u=${encodedLink}"e=Someone%E2%80%99s%20got%20a%20secret%20for%20you%E2%80%94dare%20to%20reply%20anonymously%3F`;
   shareInstagram.href = `https://www.instagram.com/?url=${encodedLink}`;
 }
 
-function saveAccessCode(roomId, accessCode) {
-  database.ref(`codes/${accessCode}`).set({
-    roomId: roomId,
-    createdAt: ServerValue.TIMESTAMP
-  });
-}
-
-const urlParams = new URLSearchParams(window.location.search);
-const roomIdFromUrl = urlParams.get('room');
-
-if (!roomIdFromUrl) {
-  generateBtn.addEventListener('click', () => {
-    const roomId = generateRoomId();
-    const accessCode = generateAccessCode();
-    localStorage.setItem('currentRoom', roomId);
-    localStorage.setItem('accessCode', accessCode);
-    saveAccessCode(roomId, accessCode);
-    const link = `${window.location.origin}/writer.html?room=${roomId}`;
-    linkDisplay.textContent = link;
-    codeDisplay.textContent = accessCode;
-    linkContainer.classList.remove('hidden');
-    setupShareLinks(link);
-    window.location.href = link;
-  });
-} else {
-  sendBtn.addEventListener('click', () => {
-    const about = aboutYou.value.trim();
+if (roomId) {
+  sendMessageBtn.addEventListener('click', () => {
+    const about = aboutYouInput.value.trim();
     const message = messageInput.value.trim();
-
     if (message) {
-      database.ref(`rooms/${roomIdFromUrl}`).push({
-        about: about || 'Anonymous',
-        message: message,
-        timestamp: ServerValue.TIMESTAMP
-      });
+      sendMessage(roomId, about, message);
       messageInput.value = '';
-      aboutYou.value = '';
       alert('Message sent!');
     } else {
       alert('Please enter a message!');
     }
   });
-
-  generateBtn.addEventListener('click', () => {
-    const roomId = generateRoomId();
-    const accessCode = generateAccessCode();
-    localStorage.setItem('currentRoom', roomId);
-    localStorage.setItem('accessCode', accessCode);
-    saveAccessCode(roomId, accessCode);
-    const link = `${window.location.origin}/writer.html?room=${roomId}`;
-    linkDisplay.textContent = link;
-    codeDisplay.textContent = accessCode;
-    linkContainer.classList.remove('hidden');
-    setupShareLinks(link);
-  });
+} else {
+  sendMessageBtn.disabled = true;
+  sendMessageBtn.classList.add('opacity-50', 'cursor-not-allowed');
 }
+
+generateLinkBtn.addEventListener('click', () => {
+  const newRoomId = generateRoomId();
+  const accessCode = generateAccessCode();
+  database.ref(`codes/${accessCode}`).set({
+    roomId: newRoomId,
+    createdAt: firebase.database.ServerValue.TIMESTAMP
+  });
+  const link = `${window.location.origin}/writer.html?room=${newRoomId}`;
+  linkDisplay.textContent = link;
+  codeDisplay.textContent = accessCode;
+  linkContainer.classList.remove('hidden');
+  setupShareLinks(link);
+  sendMessageBtn.disabled = false;
+  sendMessageBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+});
 
 copyLinkBtn.addEventListener('click', () => {
   navigator.clipboard.writeText(linkDisplay.textContent)

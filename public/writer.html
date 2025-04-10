@@ -8,11 +8,11 @@
     <link rel="stylesheet" href="/styles.css">
 </head>
 <body class="bg-gradient-to-br from-gray-100 to-blue-100 font-sans min-h-screen flex flex-col">
-    <a href="https://wa.me/919883995198" target="_blank" rel="noopener" class="fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600 transition z-10">Help</a>
+    <a href="https://wa.me/919883995198?text=Hey%2C%20I%20need%20help%20with%20Secret%20Messenger%21" target="_blank" rel="noopener" class="fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600 transition z-10">Help</a>
 
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl flex-grow">
         <header class="text-center mb-6 sm:mb-8">
-            <img src="https://images.vexels.com/media/users/3/137678/isolated/preview/cd52ed115a2c5a0992d7b23b7b3b0f53-logo-geometric-polygonal-stroke.png" alt="Secret Messenger Logo" class="mx-auto mb-4 rounded-full w-20 h-20 sm:w-24 sm:h-24 shadow-lg">
+            <img src="https://images.unsplash.com/photo-1518770660439-4636190af475" alt="Secret Messenger Logo" class="mx-auto mb-4 rounded-full w-20 h-20 sm:w-24 sm:h-24 shadow-lg">
             <h1 class="text-3xl sm:text-4xl font-bold text-gray-800 animate-fade-in">Secret Messenger</h1>
             <p class="text-gray-600 text-sm sm:text-base">Send a secret or create your own mystery</p>
         </header>
@@ -21,9 +21,14 @@
             <h2 class="text-xl sm:text-2xl font-semibold text-gray-800 mb-4">Send a Secret Message</h2>
             <input id="aboutYou" type="text" placeholder="About yourself (optional)" class="w-full p-3 border rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 transition text-sm sm:text-base">
             <textarea id="message" placeholder="Your secret message" class="w-full p-3 border rounded-lg mb-4 h-24 sm:h-32 focus:outline-none focus:ring-2 focus:ring-blue-500 transition text-sm sm:text-base"></textarea>
+            <div class="flex flex-col sm:flex-row gap-2 mb-4">
+                <button id="correctGrammar" class="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 transition">Fix Grammar (AI)</button>
+                <button id="pickupLine" class="bg-purple-500 text-white px-4 py-2 rounded-full hover:bg-purple-600 transition">Make it a Pickup Line (AI)</button>
+            </div>
             <button id="sendMessage" class="bg-green-600 text-white px-4 py-2 sm:px-6 sm:py-2 rounded-full hover:bg-green-700 transition transform hover:scale-105 w-full sm:w-auto">Send Message</button>
         </section>
 
+        <!-- Rest of the HTML remains unchanged -->
         <section class="bg-white p-4 sm:p-6 rounded-lg shadow-lg mb-6 sm:mb-8">
             <h2 class="text-xl sm:text-2xl font-semibold text-gray-800 mb-4">Create Your Own Secret Link</h2>
             <button id="generateLink" class="bg-blue-600 text-white px-4 py-2 sm:px-6 sm:py-2 rounded-full hover:bg-blue-700 transition transform hover:scale-105 w-full sm:w-auto">Generate Link</button>
@@ -51,17 +56,17 @@
                 <ul class="list-disc pl-5 text-gray-600 text-sm sm:text-base">
                     <li>Be respectful in your messages.</li>
                     <li>Anonymity is optional—share what you’re comfortable with.</li>
-                    <li>Don’t misuse the link feature.</li>
+                    <li>Don’t misuse the link or AI features.</li>
                     <li>Use your access code to view messages from any device.</li>
                 </ul>
             </div>
             <div class="bg-white p-4 sm:p-6 rounded-lg shadow-lg">
                 <h3 class="text-lg sm:text-xl font-semibold text-gray-800 mb-2">How to Use</h3>
                 <ol class="list-decimal pl-5 text-gray-600 text-sm sm:text-base">
-                    <li>Write a message and send it.</li>
-                    <li>Or generate your own link and save the access code.</li>
-                    <li>Share the link with others.</li>
-                    <li>Visit the creator page with your code to see responses.</li>
+                    <li>Write a message—use AI to fix grammar or turn it into a pickup line.</li>
+                    <li>Send it anonymously or generate your own link.</li>
+                    <li>Save the access code if you create a link.</li>
+                    <li>Share the link and check responses on the creator page!</li>
                 </ol>
             </div>
         </section>
